@@ -1,0 +1,68 @@
+### .NET (C#) Web API (backend) ###
+# Build directories
+/SmartAcademyBackend/SmartAcademyBackend/bin/
+/SmartAcademyBackend/SmartAcademyBackend/obj/
+
+# User-specific files
+.vs/
+.vscode/
+.idea/
+
+# ASP.NET specific files
+/SmartAcademyBackend/SmartAcademyBackend/App_Data/
+/SmartAcademyBackend/SmartAcademyBackend/appsettings*.json
+
+# .NET publish output
+/SmartAcademyBackend/SmartAcademyBackend/publish/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Temporary files created by Visual Studio
+.vs2019/
+/.vs2017/
+/.vs2015/
+
+# Azure Web App deployment
+/SmartAcademyBackend/SmartAcademyBackend/publish/
+
+# ASP.NET Core temporary files
+/SmartAcademyBackend/SmartAcademyBackend/aspnet/
+
+### React (Frontend) ###
+# Node.js dependencies
+/smart-academy-frontend/node_modules/
+
+# React build output
+/smart-academy-frontend/build/
+
+# Log files
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Webpack cache
+/smart-academy-frontend/.webpack/
+/smart-academy-frontend/dist/
+
+# Temporary files from editors (such as VSCode)
+/.vscode/
+
+# Dependency directories (for Yarn or Pnpm)
+.pnp/
+/.pnp.js
+
+# Editor settings (JetBrains, etc.)
+.idea/
+
+### Other ###
+# System files
+.DS_Store
+Thumbs.db

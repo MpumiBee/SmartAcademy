@@ -1,0 +1,6 @@
+@SmartAcademyBackend_HostAddress = http://localhost:5229
+
+GET {{SmartAcademyBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
