@@ -2,6 +2,7 @@
 using SmartAcademyBackend.Data;
 using SmartAcademyBackend.DTOs.ParentDTO;
 using SmartAcademyBackend.DTOs.StudentDTOs;
+using SmartAcademyBackend.DTOs.SubscriptionDTOs;
 using SmartAcademyBackend.Entities;
 
 namespace SmartAcademyBackend.Service.StudentService
@@ -73,6 +74,71 @@ namespace SmartAcademyBackend.Service.StudentService
             return student;
         }
 
-        
+        public async Task<List<GetStudentInfoDTO>> getAllStudentInformation()
+        {
+            return await _context.Students
+                                .Include(student => student.SubscriptionPlans)
+                                .Include(student => student.Parent)
+                                .Select(student => new GetStudentInfoDTO(
+                                                     student.StudentId,
+                                                     student.StudentName + " " + student.StudentSurname,
+                                                     student.Email,
+                                                     student.TeachingMode.ToString(),
+                                                     student.Grade.ToString(),
+                                                     student.Parent.ParentName+" "+student.Parent.ParentSurname,
+                                                     student.Parent.Email,
+                                                     /*
+                                                      * check if the user has selected subscription plan
+                                                      * if not return null
+                                                      * else return the subscription mapped to  GetSubscriptionPlansDTO
+                                                      */
+                                                     student.SubscriptionPlans != null ? new GetSubscriptionPlansDTO(
+                                                         student.SubscriptionPlans.SubscriptionPlanId,
+                                                         student.SubscriptionPlans.NumberOfLessons,
+                                                         student.SubscriptionPlans.AttendanceType.ToString(),
+                                                         student.SubscriptionPlans.TeachingMode.ToString(),
+                                                         student.SubscriptionPlans.amount
+                                                         ):null
+
+
+                                    ))
+                               .ToListAsync();
+
+        }
+
+        public async Task<GetStudentInfoDTO?> getStudentInformationById(int studentId)
+        {
+            var student = await _context.Students
+                                .Include(student => student.SubscriptionPlans)
+                                .Include(student => student.Parent)
+                                .Where(student => student.StudentId == studentId)
+                                .Select(student => new GetStudentInfoDTO(
+                                                     student.StudentId,
+                                                     student.StudentName + " " + student.StudentSurname,
+                                                     student.Email,
+                                                     student.TeachingMode.ToString(),
+                                                     student.Grade.ToString(),
+                                                     student.Parent.ParentName + " " + student.Parent.ParentSurname,
+                                                     student.Parent.Email,
+                                                     student.SubscriptionPlans != null ? new GetSubscriptionPlansDTO(
+                                                         student.SubscriptionPlans.SubscriptionPlanId,
+                                                         student.SubscriptionPlans.NumberOfLessons,
+                                                         student.SubscriptionPlans.AttendanceType.ToString(),
+                                                         student.SubscriptionPlans.TeachingMode.ToString(),
+                                                         student.SubscriptionPlans.amount
+                                                         ) : null
+
+
+                                    ))
+                               .FirstOrDefaultAsync();
+
+            if (student == null)
+                return null;
+
+            return student;
+
+        }
     }
+    
+
 }

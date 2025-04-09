@@ -1,4 +1,5 @@
-﻿using SmartAcademyBackend.Entities;
+﻿using SmartAcademyBackend.DTOs.ParentDTO;
+using SmartAcademyBackend.Entities;
 using SmartAcademyBackend.Enums;
 
 namespace SmartAcademyBackend.DTOs.StudentDTOs
@@ -8,7 +9,7 @@ namespace SmartAcademyBackend.DTOs.StudentDTOs
                                 string Email, 
                                 TeachingMode TeachingMode, 
                                 Grade Grade,
-                                Parent Parent, 
+                                AddParentDTO Parent, 
                                 int? SubscriptionId);
     
 }

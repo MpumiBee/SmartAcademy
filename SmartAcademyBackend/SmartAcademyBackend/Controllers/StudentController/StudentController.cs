@@ -18,8 +18,23 @@ namespace SmartAcademyBackend.Controllers.StudentController
                 return BadRequest();
             return Created();
         }
-       
-       
+
+        [HttpGet]
+        public async Task<ActionResult<List<GetStudentInfoDTO>>> getAllStudentsInformation()
+        {
+            return Ok(await studentService.getAllStudentInformation());
+        }
+
+        [HttpGet("{studentId}")]
+        public async Task<ActionResult<GetStudentInfoDTO>> geStudentsInformationById(int studentId)
+        {
+           var student= await studentService.getStudentInformationById(studentId);
+
+            if(student is null)
+                return NotFound();
+            return Ok(student);
+        }
+
     }
 
 }
