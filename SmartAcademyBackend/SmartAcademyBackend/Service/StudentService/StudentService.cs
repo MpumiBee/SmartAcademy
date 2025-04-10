@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAcademyBackend.Data;
-using SmartAcademyBackend.DTOs.ParentDTO;
 using SmartAcademyBackend.DTOs.StudentDTOs;
 using SmartAcademyBackend.DTOs.SubscriptionDTOs;
 using SmartAcademyBackend.Entities;
@@ -98,7 +97,8 @@ namespace SmartAcademyBackend.Service.StudentService
                                                          student.SubscriptionPlans.AttendanceType.ToString(),
                                                          student.SubscriptionPlans.TeachingMode.ToString(),
                                                          student.SubscriptionPlans.amount
-                                                         ):null
+                                                         ):null,
+                                                     student.IsStudentActive
 
 
                                     ))
@@ -126,7 +126,9 @@ namespace SmartAcademyBackend.Service.StudentService
                                                          student.SubscriptionPlans.AttendanceType.ToString(),
                                                          student.SubscriptionPlans.TeachingMode.ToString(),
                                                          student.SubscriptionPlans.amount
-                                                         ) : null
+                                                         ) : null,
+                                                     student.IsStudentActive
+
 
 
                                     ))
@@ -137,6 +139,42 @@ namespace SmartAcademyBackend.Service.StudentService
 
             return student;
 
+        }
+
+        public async Task<string> editStudentInformation(int studentId, EditStudentDTO editStudent)
+        {
+            var student =await  _context.Students.FindAsync( studentId );
+
+            if (student is null)
+                return "student not found";
+
+            student.StudentName = editStudent.StudentName;
+            student.StudentSurname = editStudent.StudentSurname;
+            student.Email = editStudent.email;
+            student.Grade = editStudent.Grade;
+            student.SubscriptionId = editStudent.subscriptionId;
+         
+
+            await _context.SaveChangesAsync();
+            return "updated";
+        }
+
+        public async Task deactivateStudent(int studentId)
+        {
+            var student = await _context.Students.FindAsync(studentId );
+            if (student is null)
+                return;
+            student.IsStudentActive=false;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task activateStudent(int studentId)
+        {
+            var student = await _context.Students.FindAsync(studentId);
+            if (student is null)
+                return;
+            student.IsStudentActive = true;
+            await _context.SaveChangesAsync();
         }
     }
     

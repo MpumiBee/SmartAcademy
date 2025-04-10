@@ -8,5 +8,8 @@ namespace SmartAcademyBackend.Service.StudentService
         public Task<Student?> addNewStudent(AddStudentDTO newStudent);
         public Task<List<GetStudentInfoDTO>> getAllStudentInformation();
         public Task<GetStudentInfoDTO?> getStudentInformationById(int studentId);
+        public Task<string> editStudentInformation(int studentId,EditStudentDTO editStudent);
+        public Task deactivateStudent(int studentId);
+        public Task activateStudent(int studentId);
     }
 }

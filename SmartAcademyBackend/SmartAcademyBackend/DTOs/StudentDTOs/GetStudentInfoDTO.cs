@@ -11,7 +11,8 @@ namespace SmartAcademyBackend.DTOs.StudentDTOs
         string grade,
         string parentFullName,
         string parentEmail,
-        GetSubscriptionPlansDTO? subscriptionPlan
+        GetSubscriptionPlansDTO? subscriptionPlan,
+        bool isStudentActive
      
         );
     

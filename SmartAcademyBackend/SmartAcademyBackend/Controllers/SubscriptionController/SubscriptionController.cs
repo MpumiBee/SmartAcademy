@@ -57,6 +57,7 @@ namespace SmartAcademyBackend.Controllers.SubscriptionController
             return Ok(subscription);
 
         }
+
         [HttpDelete("{subscriptionId}")]
         public async Task<IActionResult> deleteSubscription(int subscriptionId)
         {

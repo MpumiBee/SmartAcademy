@@ -15,6 +15,7 @@ namespace SmartAcademyBackend.Entities
         public Parent? Parent { get; set; }
         public int ParentId { get; set; }
         public int? SubscriptionId { get; set; }
+        public bool IsStudentActive { get; set; }=true;
         public SubscriptionPlans? SubscriptionPlans { get; set; }
         public ICollection<Subjects> Subjects { get; set; } = new List<Subjects>();
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();

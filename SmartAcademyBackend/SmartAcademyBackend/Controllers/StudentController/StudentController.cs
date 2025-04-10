@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartAcademyBackend.DTOs.StudentDTOs;
-using SmartAcademyBackend.Entities;
 using SmartAcademyBackend.Service.StudentService;
 
 namespace SmartAcademyBackend.Controllers.StudentController
@@ -35,6 +33,30 @@ namespace SmartAcademyBackend.Controllers.StudentController
             return Ok(student);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> editStudentInformation(int studentId,EditStudentDTO editStudent)
+        {
+            var studentUpdate = await studentService.editStudentInformation(studentId,editStudent);
+
+            if(studentUpdate.Equals("student not found"))
+                return NotFound(studentUpdate);
+
+            return Ok(studentUpdate);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> deactivateStudentAccount(int studentId)
+        {
+            await studentService.deactivateStudent(studentId);
+
+           return NoContent();
+        }
+        [HttpPut("activate-account{studentId}")]
+        public async Task<IActionResult> eactivateStudentAccount(int studentId)
+        {
+            await studentService.activateStudent(studentId);
+
+            return NoContent();
+        }
     }
 
 }
