@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAcademyBackend.Entities;
+using SmartAcademyBackend.Enums;
 
 namespace SmartAcademyBackend.Data
 {
@@ -107,6 +108,69 @@ namespace SmartAcademyBackend.Data
             modelBuilder.Entity<Booking>()
                .Property(booking => booking.AttendanceType)
                .HasConversion<string>();
+
+
+
+            //seeding data to my db
+            modelBuilder.Entity<Subjects>().HasData(
+            new Subjects { SubjectID = 1, SubjectName = "English" },
+             new Subjects { SubjectID = 2, SubjectName = "Afrikaans" },
+             new Subjects { SubjectID = 3, SubjectName = "IsiZulu" },
+            new Subjects { SubjectID = 4, SubjectName = "Mathematics" },
+            new Subjects { SubjectID = 5, SubjectName = "Life Skills" },
+            new Subjects { SubjectID = 6, SubjectName = "Natural Sciences" },
+            new Subjects { SubjectID = 7, SubjectName = "Social Sciences" },
+            new Subjects { SubjectID = 8, SubjectName = "Life Orientation" },
+            new Subjects { SubjectID = 9, SubjectName = "Economic Management Sciences" },
+            new Subjects { SubjectID = 10, SubjectName = "Technology" },
+            new Subjects { SubjectID = 11, SubjectName = "Creative Arts" },
+            new Subjects { SubjectID = 12, SubjectName = "Mathematics Literacy" },
+            new Subjects { SubjectID = 13, SubjectName = "Physical Sciences" },
+            new Subjects { SubjectID = 14, SubjectName = "Accounting" },
+            new Subjects { SubjectID = 15, SubjectName = "Business Studies" },
+            new Subjects { SubjectID = 16, SubjectName = "Geography" },
+            new Subjects { SubjectID = 17, SubjectName = "History" },
+            new Subjects { SubjectID = 18, SubjectName = "Computer Applications Technology" },
+            new Subjects { SubjectID = 19, SubjectName = "Information Technology" },
+            new Subjects { SubjectID = 20, SubjectName = "Tourism" }
+            );
+
+
+            modelBuilder.Entity<TimeSlots>().HasData(
+             // Monday
+             new TimeSlots { TimeSlotId = 1, DayOfWeek = DaysOfTheWeek.Monday, StartTime = new TimeOnly(14, 0), EndTime = new TimeOnly(15, 0) },
+             new TimeSlots { TimeSlotId = 2, DayOfWeek = DaysOfTheWeek.Monday, StartTime = new TimeOnly(15, 0), EndTime = new TimeOnly(16, 0) },
+             new TimeSlots { TimeSlotId = 3, DayOfWeek = DaysOfTheWeek.Monday, StartTime = new TimeOnly(16, 0), EndTime = new TimeOnly(17, 0) },
+
+             // Tuesday
+             new TimeSlots { TimeSlotId = 4, DayOfWeek = DaysOfTheWeek.Tuesday, StartTime = new TimeOnly(14, 0), EndTime = new TimeOnly(15, 0) },
+             new TimeSlots { TimeSlotId = 5, DayOfWeek = DaysOfTheWeek.Tuesday, StartTime = new TimeOnly(15, 0), EndTime = new TimeOnly(16, 0) },
+             new TimeSlots { TimeSlotId = 6, DayOfWeek = DaysOfTheWeek.Tuesday, StartTime = new TimeOnly(16, 0), EndTime = new TimeOnly(17, 0) },
+
+             // Wednesday
+             new TimeSlots { TimeSlotId = 7, DayOfWeek = DaysOfTheWeek.Wednesday, StartTime = new TimeOnly(14, 0), EndTime = new TimeOnly(15, 0) },
+             new TimeSlots { TimeSlotId = 8, DayOfWeek = DaysOfTheWeek.Wednesday, StartTime = new TimeOnly(15, 0), EndTime = new TimeOnly(16, 0) },
+             new TimeSlots { TimeSlotId = 9, DayOfWeek = DaysOfTheWeek.Wednesday, StartTime = new TimeOnly(16, 0), EndTime = new TimeOnly(17, 0) },
+
+             // Thursday
+             new TimeSlots { TimeSlotId = 10, DayOfWeek = DaysOfTheWeek.Thursday, StartTime = new TimeOnly(14, 0), EndTime = new TimeOnly(15, 0) },
+             new TimeSlots { TimeSlotId = 11, DayOfWeek = DaysOfTheWeek.Thursday, StartTime = new TimeOnly(15, 0), EndTime = new TimeOnly(16, 0) },
+             new TimeSlots { TimeSlotId = 12, DayOfWeek = DaysOfTheWeek.Thursday, StartTime = new TimeOnly(16, 0), EndTime = new TimeOnly(17, 0) },
+
+             // Friday
+             new TimeSlots { TimeSlotId = 13, DayOfWeek = DaysOfTheWeek.Friday, StartTime = new TimeOnly(14, 0), EndTime = new TimeOnly(15, 0) },
+             new TimeSlots { TimeSlotId = 14, DayOfWeek = DaysOfTheWeek.Friday, StartTime = new TimeOnly(15, 0), EndTime = new TimeOnly(16, 0) },
+             new TimeSlots { TimeSlotId = 15, DayOfWeek = DaysOfTheWeek.Friday, StartTime = new TimeOnly(16, 0), EndTime = new TimeOnly(17, 0) },
+
+             // Saturday
+             new TimeSlots { TimeSlotId = 16, DayOfWeek = DaysOfTheWeek.Saturday, StartTime = new TimeOnly(10, 0), EndTime = new TimeOnly(11, 0) },
+             new TimeSlots { TimeSlotId = 18, DayOfWeek = DaysOfTheWeek.Saturday, StartTime = new TimeOnly(11, 0), EndTime = new TimeOnly(12, 0) },
+             new TimeSlots { TimeSlotId = 19, DayOfWeek = DaysOfTheWeek.Saturday, StartTime = new TimeOnly(12, 0), EndTime = new TimeOnly(13, 0) },
+             new TimeSlots { TimeSlotId = 20, DayOfWeek = DaysOfTheWeek.Saturday, StartTime = new TimeOnly(13, 0), EndTime = new TimeOnly(14, 0) }
+         );
+
+
+
 
 
         }

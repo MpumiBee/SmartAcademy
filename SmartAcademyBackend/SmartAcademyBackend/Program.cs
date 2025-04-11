@@ -3,6 +3,7 @@ using Scalar.AspNetCore;
 using SmartAcademyBackend.Data;
 using SmartAcademyBackend.Service.StudentService;
 using SmartAcademyBackend.Service.SubscriptionService;
+using SmartAcademyBackend.Service.TutorService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITutorService, TutorService>();
+
 builder.Services.AddDbContext<SmartAcademyDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

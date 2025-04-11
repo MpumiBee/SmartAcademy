@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SmartAcademyBackend.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartAcademyBackend.Entities
 {
@@ -8,6 +9,7 @@ namespace SmartAcademyBackend.Entities
         public int TimeSlotId { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public DaysOfTheWeek DayOfWeek { get; set; }    
 
         public ICollection<TutorAvailability> TutorAvailabilities { get; set; } = new List<TutorAvailability>();
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
