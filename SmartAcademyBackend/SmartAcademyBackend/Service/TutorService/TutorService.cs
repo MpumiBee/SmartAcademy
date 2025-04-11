@@ -90,5 +90,27 @@ namespace SmartAcademyBackend.Service.TutorService
                                             mapTutorAvailability(tutor.TutorAvailabilities)
                                             );
         }
+
+        public async Task<List<GetTutorInfoDTO>?> getAllTutors()
+        {
+
+            var tutor = await _context.Tutors
+                        .Include(tutor => tutor.Subjects)
+                        .Include(tutor => tutor.TutorAvailabilities)
+                                .ThenInclude(tutor => tutor.TimeSlots)
+                       .Select(tutor=> new GetTutorInfoDTO(tutor.TutorId,
+                                            tutor.TutorName,
+                                            tutor.TutorSurname,
+                                            tutor.ContactNumber,
+                                            tutor.TutorBio,
+                                            tutor.TeachingMode.ToString(),
+                                            mapSubjects(tutor.Subjects),
+                                            mapTutorAvailability(tutor.TutorAvailabilities)
+                                            ))
+                        .ToListAsync();
+
+
+            return tutor;
+        }
     }
 }

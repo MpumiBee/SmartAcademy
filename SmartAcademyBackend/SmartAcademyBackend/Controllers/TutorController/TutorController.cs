@@ -27,5 +27,12 @@ namespace SmartAcademyBackend.Controllers.TutorController
                 return NotFound("Tutor not found");
             return Ok(tutor);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<GetTutorInfoDTO>?>> getAllTutors()
+        {
+           
+            return Ok(await tutorService.getAllTutors());
+        }
     }
 }

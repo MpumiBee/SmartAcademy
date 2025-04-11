@@ -7,5 +7,6 @@ namespace SmartAcademyBackend.Service.TutorService
     {
         Task<Tutor?> addNewTutor(AddTutorDTO addTutor);
         Task<GetTutorInfoDTO?> getTutorById(int id);
+        Task<List<GetTutorInfoDTO>?> getAllTutors();
     }
 }

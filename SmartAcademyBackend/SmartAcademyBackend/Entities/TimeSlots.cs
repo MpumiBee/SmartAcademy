@@ -12,7 +12,7 @@ namespace SmartAcademyBackend.Entities
         public DaysOfTheWeek DayOfWeek { get; set; }    
 
         public ICollection<TutorAvailability> TutorAvailabilities { get; set; } = new List<TutorAvailability>();
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        
     }
 }
 

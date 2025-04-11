@@ -20,6 +20,9 @@ builder.Services.AddScoped<ITutorService, TutorService>();
 builder.Services.AddDbContext<SmartAcademyDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+var getDayName = new DateOnly(2003,4,25).DayOfWeek.ToString();
+Console.WriteLine(getDayName);  
+
 //private readonly SmartAcademyDbContext
 
 var app = builder.Build();

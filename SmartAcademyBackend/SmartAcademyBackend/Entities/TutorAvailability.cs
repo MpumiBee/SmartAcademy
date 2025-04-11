@@ -12,5 +12,6 @@ namespace SmartAcademyBackend.Entities
         public required DaysOfTheWeek Day { get; set; }
         public int TimeSlotId { get; set; }
         public  TimeSlots? TimeSlots { get; set; }
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

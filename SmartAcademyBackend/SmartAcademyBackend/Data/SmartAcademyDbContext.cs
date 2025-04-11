@@ -80,7 +80,7 @@ namespace SmartAcademyBackend.Data
                 .HasOne(student => student.SubscriptionPlans)
                 .WithOne(SubscriptionPlans => SubscriptionPlans.student)
                 .HasForeignKey<Student>(student => student.SubscriptionId)
-                .OnDelete(DeleteBehavior.NoAction); ;
+                .OnDelete(DeleteBehavior.NoAction); 
 
 
             modelBuilder.Entity<Student>()
@@ -108,6 +108,12 @@ namespace SmartAcademyBackend.Data
             modelBuilder.Entity<Booking>()
                .Property(booking => booking.AttendanceType)
                .HasConversion<string>();
+            modelBuilder.Entity<TutorAvailability>()
+    .HasMany(t => t.Bookings)
+    .WithOne(b => b.TutorAvailability)
+    .HasForeignKey(b => b.TutorAvailabilityId)
+    .OnDelete(DeleteBehavior.NoAction);
+
 
 
 
