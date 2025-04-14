@@ -2,6 +2,7 @@
 using SmartAcademyBackend.Data;
 using SmartAcademyBackend.DTOs.BookingDTO;
 using SmartAcademyBackend.Entities;
+using SmartAcademyBackend.Enums;
 
 namespace SmartAcademyBackend.Service.BookingService
 {
@@ -54,8 +55,56 @@ namespace SmartAcademyBackend.Service.BookingService
 
             return studentTeachingMode.Equals(tutorTeachingMode);
         }
+
+        private async Task<bool> isTutorBooked(int tutorId,DateOnly bookingDate,int tutorAvailabilityId)
+        {
+            return await _context.Bookings.AnyAsync(booking=> booking.TutorId==tutorId && 
+                                                               booking.TutorAvailabilityId==tutorAvailabilityId &&
+                                                               booking.Date.Equals(bookingDate)
+                
+                );
+        }
+
+        private async Task<AttendanceType?> getAttendance(int tutorId, DateOnly bookingDate, int tutorAvailabilityId)
+        {
+            if (await isTutorBooked(tutorId, bookingDate, tutorAvailabilityId))
+            {
+                return await _context.Bookings
+                             .Where(booking => booking.TutorId == tutorId &&
+                                               booking.TutorAvailabilityId == tutorAvailabilityId &&
+                                               booking.Date.Equals(bookingDate))
+                              .Select(booking => booking.AttendanceType)
+                              .FirstOrDefaultAsync();
+                             
+                              
+            }
+            return null;
+        }
+        private async Task<bool> hasStudentBooked(int studentId, DateOnly bookingDate, int tutorAvailabilityId)
+        {
+          
+                return await _context.Bookings
+                             .Where(booking => booking.StudentId == studentId &&
+                                               booking.TutorAvailabilityId == tutorAvailabilityId &&
+                                               booking.Date.Equals(bookingDate))
+                              .AnyAsync();
+
+        
+        }
         public async Task<string> addNewBooking(AddbookingDTO addbookingDTO)
         {
+            var getAttendanceType = await getAttendance(addbookingDTO.TutorId,addbookingDTO.sessionDate,addbookingDTO.tutorAvailabilityId);
+
+            if (await hasStudentBooked(addbookingDTO.StudentId, addbookingDTO.sessionDate, addbookingDTO.tutorAvailabilityId))
+                return "student has already booked";
+
+            if (getAttendanceType == AttendanceType.OneOnOne)
+                return "One on One session booked";
+
+
+            if (getAttendanceType == AttendanceType.Group && addbookingDTO.AttendanceType == AttendanceType.OneOnOne)
+                return "Group session booked";
+
             if (!await isStudentExist(addbookingDTO.StudentId))
                 return "student does not exist";
 
@@ -91,6 +140,144 @@ namespace SmartAcademyBackend.Service.BookingService
             return "booking added";
 
 
+        }
+
+        public async Task<List<GetBookingDTO>> getAllBookings()
+        {
+            return await _context.Bookings
+                   .Include(booking=>booking.Student)
+                   .Include(booking=>booking.Tutor) 
+                   .Include(booking=>booking.Subjects)
+                   .Include(booking=>booking.TutorAvailability)
+                   .Select(booking=>new GetBookingDTO(
+                                    booking.BookingId,
+                                    booking.Student.StudentName +" "+booking.Student.StudentSurname,
+                                    booking.Student.Email,
+                                    booking.Tutor.TutorName+" "+ booking.Tutor.TutorName,
+                                    booking.Tutor.Email,
+                                    booking.Subjects.SubjectName,
+                                    booking.Date,
+                                    booking.TutorAvailability.TimeSlots.StartTime,
+                                    booking.TutorAvailability.TimeSlots.EndTime,
+                                    booking.Date.DayOfWeek.ToString(),
+                                    booking.AttendanceType.ToString(),
+                                    booking.Tutor.TeachingMode.ToString(),
+                                    booking.BookingStatus.ToString()
+
+
+                       )).ToListAsync();
+        }
+
+        public async Task<List<GetBookingDTO>> getBookingByStudentId(int studentId)
+        {
+            return await _context.Bookings
+                    .Include(booking => booking.Student)
+                    .Include(booking => booking.Tutor)
+                    .Include(booking => booking.Subjects)
+                    .Include(booking => booking.TutorAvailability)
+                    .Where(booking=>booking.StudentId==studentId)
+                    .Select(booking => new GetBookingDTO(
+                                     booking.BookingId,
+                                     booking.Student.StudentName + " " + booking.Student.StudentSurname,
+                                     booking.Student.Email,
+                                     booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
+                                     booking.Tutor.Email,
+                                     booking.Subjects.SubjectName,
+                                     booking.Date,
+                                     booking.TutorAvailability.TimeSlots.StartTime,
+                                     booking.TutorAvailability.TimeSlots.EndTime,
+                                     booking.Date.DayOfWeek.ToString(),
+                                     booking.AttendanceType.ToString(),
+                                     booking.Tutor.TeachingMode.ToString(),
+                                     booking.BookingStatus.ToString()
+
+
+                        )).ToListAsync();
+        }
+
+        public async Task<List<GetBookingDTO>> getBookingByTutorId(int tutorId)
+        {
+            return await _context.Bookings
+                  .Include(booking => booking.Student)
+                  .Include(booking => booking.Tutor)
+                  .Include(booking => booking.Subjects)
+                  .Include(booking => booking.TutorAvailability)
+                  .Where(booking => booking.TutorId == tutorId)
+                  .Select(booking => new GetBookingDTO(
+                                   booking.BookingId,
+                                   booking.Student.StudentName + " " + booking.Student.StudentSurname,
+                                   booking.Student.Email,
+                                   booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
+                                   booking.Tutor.Email,
+                                   booking.Subjects.SubjectName,
+                                   booking.Date,
+                                   booking.TutorAvailability.TimeSlots.StartTime,
+                                   booking.TutorAvailability.TimeSlots.EndTime,
+                                   booking.Date.DayOfWeek.ToString(),
+                                   booking.AttendanceType.ToString(),
+                                   booking.Tutor.TeachingMode.ToString(),
+                                   booking.BookingStatus.ToString()
+
+
+                      )).ToListAsync();
+        }
+
+        public async Task deleteBooking(int bookingId)
+        {
+           var booking =await  _context.Bookings
+                         .Where(booking=>booking.BookingId==bookingId)
+                         .FirstOrDefaultAsync();
+
+            if (booking == null)
+                return;
+
+            booking.BookingStatus = BookingStatus.Cancelled;
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task<List<GetBookingDTO>> getBookingsByDate(DateOnly bookingsDate)
+        {
+            return await _context.Bookings
+                   .Where(booking=>booking.Date.Equals(bookingsDate))
+                   .Select(booking => new GetBookingDTO(
+                                   booking.BookingId,
+                                   booking.Student.StudentName + " " + booking.Student.StudentSurname,
+                                   booking.Student.Email,
+                                   booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
+                                   booking.Tutor.Email,
+                                   booking.Subjects.SubjectName,
+                                   booking.Date,
+                                   booking.TutorAvailability.TimeSlots.StartTime,
+                                   booking.TutorAvailability.TimeSlots.EndTime,
+                                   booking.Date.DayOfWeek.ToString(),
+                                   booking.AttendanceType.ToString(),
+                                   booking.Tutor.TeachingMode.ToString(),
+                                   booking.BookingStatus.ToString()
+                                   ))
+                   .ToListAsync();
+        }
+
+        public async Task<GetBookingDTO?> getBookingsByBookingId(int bookingId)
+        {
+            return await _context.Bookings
+                   .Where(booking => booking.BookingId==bookingId)
+                   .Select(booking => new GetBookingDTO(
+                                   booking.BookingId,
+                                   booking.Student.StudentName + " " + booking.Student.StudentSurname,
+                                   booking.Student.Email,
+                                   booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
+                                   booking.Tutor.Email,
+                                   booking.Subjects.SubjectName,
+                                   booking.Date,
+                                   booking.TutorAvailability.TimeSlots.StartTime,
+                                   booking.TutorAvailability.TimeSlots.EndTime,
+                                   booking.Date.DayOfWeek.ToString(),
+                                   booking.AttendanceType.ToString(),
+                                   booking.Tutor.TeachingMode.ToString(),
+                                   booking.BookingStatus.ToString()
+                                   ))
+                   .FirstOrDefaultAsync();
         }
     }
 }

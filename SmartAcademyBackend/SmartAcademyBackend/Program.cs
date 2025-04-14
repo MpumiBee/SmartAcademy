@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using SmartAcademyBackend.Data;
+using SmartAcademyBackend.Service.BookingService;
 using SmartAcademyBackend.Service.StudentService;
 using SmartAcademyBackend.Service.SubscriptionService;
 using SmartAcademyBackend.Service.TutorService;
@@ -16,12 +17,11 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITutorService, TutorService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddDbContext<SmartAcademyDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-var getDayName = new DateOnly(2003,4,25).DayOfWeek.ToString();
-Console.WriteLine(getDayName);  
+ 
 
 //private readonly SmartAcademyDbContext
 
