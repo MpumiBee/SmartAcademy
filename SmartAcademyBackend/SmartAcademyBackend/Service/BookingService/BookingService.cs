@@ -151,13 +151,11 @@ namespace SmartAcademyBackend.Service.BookingService
                    .Include(booking=>booking.TutorAvailability)
                    .Select(booking=>new GetBookingDTO(
                                     booking.BookingId,
-                                    booking.Student.StudentName +" "+booking.Student.StudentSurname,
-                                    booking.Student.Email,
+                                    booking.Student!.StudentName +" "+booking.Student.StudentSurname,
                                     booking.Tutor.TutorName+" "+ booking.Tutor.TutorName,
-                                    booking.Tutor.Email,
-                                    booking.Subjects.SubjectName,
+                                    booking.Subjects!.SubjectName,
                                     booking.Date,
-                                    booking.TutorAvailability.TimeSlots.StartTime,
+                                    booking.TutorAvailability!.TimeSlots!.StartTime,
                                     booking.TutorAvailability.TimeSlots.EndTime,
                                     booking.Date.DayOfWeek.ToString(),
                                     booking.AttendanceType.ToString(),
@@ -178,13 +176,11 @@ namespace SmartAcademyBackend.Service.BookingService
                     .Where(booking=>booking.StudentId==studentId)
                     .Select(booking => new GetBookingDTO(
                                      booking.BookingId,
-                                     booking.Student.StudentName + " " + booking.Student.StudentSurname,
-                                     booking.Student.Email,
-                                     booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
-                                     booking.Tutor.Email,
-                                     booking.Subjects.SubjectName,
+                                     booking.Student!.StudentName + " " + booking.Student.StudentSurname,
+                                     booking.Tutor!.TutorName + " " + booking.Tutor.TutorName,
+                                     booking.Subjects!.SubjectName,
                                      booking.Date,
-                                     booking.TutorAvailability.TimeSlots.StartTime,
+                                     booking.TutorAvailability!.TimeSlots!.StartTime,
                                      booking.TutorAvailability.TimeSlots.EndTime,
                                      booking.Date.DayOfWeek.ToString(),
                                      booking.AttendanceType.ToString(),
@@ -205,20 +201,16 @@ namespace SmartAcademyBackend.Service.BookingService
                   .Where(booking => booking.TutorId == tutorId)
                   .Select(booking => new GetBookingDTO(
                                    booking.BookingId,
-                                   booking.Student.StudentName + " " + booking.Student.StudentSurname,
-                                   booking.Student.Email,
-                                   booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
-                                   booking.Tutor.Email,
-                                   booking.Subjects.SubjectName,
+                                   booking.Student!.StudentName + " " + booking.Student.StudentSurname,
+                                   booking.Tutor!.TutorName + " " + booking.Tutor.TutorName,
+                                   booking.Subjects!.SubjectName,
                                    booking.Date,
-                                   booking.TutorAvailability.TimeSlots.StartTime,
+                                   booking.TutorAvailability!.TimeSlots!.StartTime,
                                    booking.TutorAvailability.TimeSlots.EndTime,
                                    booking.Date.DayOfWeek.ToString(),
                                    booking.AttendanceType.ToString(),
                                    booking.Tutor.TeachingMode.ToString(),
                                    booking.BookingStatus.ToString()
-
-
                       )).ToListAsync();
         }
 
@@ -242,13 +234,13 @@ namespace SmartAcademyBackend.Service.BookingService
                    .Where(booking=>booking.Date.Equals(bookingsDate))
                    .Select(booking => new GetBookingDTO(
                                    booking.BookingId,
-                                   booking.Student.StudentName + " " + booking.Student.StudentSurname,
-                                   booking.Student.Email,
-                                   booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
-                                   booking.Tutor.Email,
-                                   booking.Subjects.SubjectName,
+                                   booking.Student!.StudentName! + " " + booking.Student.StudentSurname,
+                                  // booking.Student.Email,
+                                   booking.Tutor!.TutorName + " " + booking.Tutor.TutorName,
+                                  // booking.Tutor.Email,
+                                   booking.Subjects!.SubjectName!,
                                    booking.Date,
-                                   booking.TutorAvailability.TimeSlots.StartTime,
+                                   booking.TutorAvailability!.TimeSlots!.StartTime,
                                    booking.TutorAvailability.TimeSlots.EndTime,
                                    booking.Date.DayOfWeek.ToString(),
                                    booking.AttendanceType.ToString(),
@@ -264,13 +256,13 @@ namespace SmartAcademyBackend.Service.BookingService
                    .Where(booking => booking.BookingId==bookingId)
                    .Select(booking => new GetBookingDTO(
                                    booking.BookingId,
-                                   booking.Student.StudentName + " " + booking.Student.StudentSurname,
-                                   booking.Student.Email,
-                                   booking.Tutor.TutorName + " " + booking.Tutor.TutorName,
-                                   booking.Tutor.Email,
-                                   booking.Subjects.SubjectName,
+                                   booking.Student!.StudentName + " " + booking.Student.StudentSurname,
+                                  // booking.Student.Email,
+                                   booking.Tutor!.TutorName + " " + booking.Tutor.TutorName,
+                                   //booking.Tutor.Email,
+                                   booking.Subjects!.SubjectName,
                                    booking.Date,
-                                   booking.TutorAvailability.TimeSlots.StartTime,
+                                   booking.TutorAvailability!.TimeSlots!.StartTime,
                                    booking.TutorAvailability.TimeSlots.EndTime,
                                    booking.Date.DayOfWeek.ToString(),
                                    booking.AttendanceType.ToString(),

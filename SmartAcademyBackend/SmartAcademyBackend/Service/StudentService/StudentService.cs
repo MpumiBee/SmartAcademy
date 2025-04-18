@@ -8,62 +8,54 @@ namespace SmartAcademyBackend.Service.StudentService
 {
     public class StudentService(SmartAcademyDbContext _context):IStudentService
     {
-        private async Task<int> searchParentId(string email)
-        {
-            return await _context.Parents
-                        .Where(parent => parent.Email.ToLower().Equals(email.ToLower()))
-                        .Select(parent => parent.ParentId)
-                        .FirstOrDefaultAsync();
-            
-
-        }
-        private async Task<bool> isStudentEmailExists(string email)
+       
+        private async Task<bool> isStudentExists(int userId)
         {
             return await _context.Students
-                        .Where(Student => Student.Email.ToLower().Equals(email.ToLower()))
-                        .AnyAsync();
+                        .AnyAsync(Student => Student.UserId == userId);
 
 
         }
 
-       
-        public async Task<Student?> addNewStudent(AddStudentDTO newStudent)
+
+        public async Task<Student?> addNewStudent(AddStudentDTO newStudent, int userId)
         {
-            
-            if (await isStudentEmailExists(newStudent.Email))
+
+            if (await isStudentExists(userId))
                 return null;
 
-            var parentId = await searchParentId(newStudent.Parent.Email);
-           
-            Student student;
+            // var parentId = await searchParentId(newStudent.Parent.Email);
+
+            /* Student student;
 
 
-            if (parentId==0)
+             if (parentId==0)
+             {
+
+                 Parent parent = new()
+                 {
+                     ParentSurname = newStudent.Parent.ParentSurname,
+                     Email= newStudent.Parent.Email,
+                     ParentName = newStudent.Parent.ParentName, 
+                 };
+
+                  _context.Parents.Add(parent);
+                 await _context.SaveChangesAsync();
+
+                 parentId = await searchParentId(parent.Email);
+
+             }*/
+
+            Student student = new()
             {
-               
-                Parent parent = new()
-                {
-                    ParentSurname = newStudent.Parent.ParentSurname,
-                    Email= newStudent.Parent.Email,
-                    ParentName = newStudent.Parent.ParentName, 
-                };
-
-                 _context.Parents.Add(parent);
-                await _context.SaveChangesAsync();
-
-                parentId = await searchParentId(parent.Email);
-
-            }
-            
-            student = new()
-            {
-                Email = newStudent.Email,
+             
                 Grade = newStudent.Grade,
                 StudentName = newStudent.StudentName,
                 StudentSurname = newStudent.StudentSurname,
                 TeachingMode = newStudent.TeachingMode,
-                ParentId = parentId,
-                SubscriptionId = newStudent.SubscriptionId
+                SubscriptionId = newStudent.SubscriptionId,
+                UserId = userId
+                
 
             };
 
@@ -77,15 +69,13 @@ namespace SmartAcademyBackend.Service.StudentService
         {
             return await _context.Students
                                 .Include(student => student.SubscriptionPlans)
-                                .Include(student => student.Parent)
+                                .Include(student => student.SubscriptionPlans)
                                 .Select(student => new GetStudentInfoDTO(
                                                      student.StudentId,
                                                      student.StudentName + " " + student.StudentSurname,
-                                                     student.Email,
                                                      student.TeachingMode.ToString(),
                                                      student.Grade.ToString(),
-                                                     student.Parent.ParentName+" "+student.Parent.ParentSurname,
-                                                     student.Parent.Email,
+                                                     
                                                      /*
                                                       * check if the user has selected subscription plan
                                                       * if not return null
@@ -110,16 +100,12 @@ namespace SmartAcademyBackend.Service.StudentService
         {
             var student = await _context.Students
                                 .Include(student => student.SubscriptionPlans)
-                                .Include(student => student.Parent)
                                 .Where(student => student.StudentId == studentId)
                                 .Select(student => new GetStudentInfoDTO(
                                                      student.StudentId,
                                                      student.StudentName + " " + student.StudentSurname,
-                                                     student.Email,
                                                      student.TeachingMode.ToString(),
                                                      student.Grade.ToString(),
-                                                     student.Parent.ParentName + " " + student.Parent.ParentSurname,
-                                                     student.Parent.Email,
                                                      student.SubscriptionPlans != null ? new GetSubscriptionPlansDTO(
                                                          student.SubscriptionPlans.SubscriptionPlanId,
                                                          student.SubscriptionPlans.NumberOfLessons,
@@ -150,7 +136,6 @@ namespace SmartAcademyBackend.Service.StudentService
 
             student.StudentName = editStudent.StudentName;
             student.StudentSurname = editStudent.StudentSurname;
-            student.Email = editStudent.email;
             student.Grade = editStudent.Grade;
             student.SubscriptionId = editStudent.subscriptionId;
          

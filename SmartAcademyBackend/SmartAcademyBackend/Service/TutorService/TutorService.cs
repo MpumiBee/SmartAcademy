@@ -9,10 +9,7 @@ namespace SmartAcademyBackend.Service.TutorService
 {
     public class TutorService(SmartAcademyDbContext _context) : ITutorService
     {
-        private async Task<bool> isTutorExist(string email)
-        {
-            return await _context.Tutors.AnyAsync(t => t.Email == email);
-        }
+       
         //function for mapping subjects to a tutor
         private List<GetSubjectsDTO> mapSubjects(IEnumerable<Subjects> subjects)
         {
@@ -27,14 +24,14 @@ namespace SmartAcademyBackend.Service.TutorService
         {
             return tutorAvailabilities.Select( TutorAvailability => new GetTutorAvailabilitySlots(
                                                 TutorAvailability.Day.ToString(),
-                                                TutorAvailability.TimeSlots.EndTime,
+                                                TutorAvailability.TimeSlots!.EndTime,
                                                 TutorAvailability.TimeSlots.StartTime
                                                )).ToList();
         }
-        public async Task<Tutor?> addNewTutor(AddTutorDTO addTutor)
+        public async Task<Tutor?> addNewTutor(AddTutorDTO addTutor,int userId)
         {
 
-            if (await isTutorExist(addTutor.Email))
+            if (await _context.Tutors.AnyAsync(tutor => tutor.UserId == userId))
                 return null;
 
             //check whethere the subject ids selected exist
@@ -47,7 +44,6 @@ namespace SmartAcademyBackend.Service.TutorService
             Tutor tutor = new()
             {
                 ContactNumber = addTutor.ContactNumber,
-                Email = addTutor.Email,
                 TeachingMode = addTutor.TeachingMode,
                 TutorBio = addTutor.TutorBio,
                 TutorName = addTutor.TutorName,

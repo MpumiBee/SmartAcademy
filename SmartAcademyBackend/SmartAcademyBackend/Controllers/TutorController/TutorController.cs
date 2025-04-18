@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartAcademyBackend.DTOs.TutorDTO;
 using SmartAcademyBackend.Entities;
 using SmartAcademyBackend.Service.TutorService;
+using System.Security.Claims;
 
 namespace SmartAcademyBackend.Controllers.TutorController
 {
@@ -13,7 +14,8 @@ namespace SmartAcademyBackend.Controllers.TutorController
         [HttpPost]
         public async Task<ActionResult<Tutor?>> addNewTutor(AddTutorDTO newTutor)
         {
-            var tutor = await tutorService.addNewTutor(newTutor);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var tutor = await tutorService.addNewTutor(newTutor, userId);
             if (newTutor == null)
                 return BadRequest("Tutor exists");
             return Ok();

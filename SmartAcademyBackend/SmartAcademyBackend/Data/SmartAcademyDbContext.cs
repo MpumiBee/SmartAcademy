@@ -10,7 +10,7 @@ namespace SmartAcademyBackend.Data
         public DbSet<Subjects> Subjects { get; set; }
         public DbSet<TimeSlots> TimeSlots { get; set; }
         public DbSet<TutorAvailability> TutorAvailabilities { get; set; }
-
+        public DbSet<User> Users { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -57,10 +57,10 @@ namespace SmartAcademyBackend.Data
            .HasForeignKey(TutorAvailability => TutorAvailability.TimeSlotId);
 
 
-            modelBuilder.Entity<Parent>()
+           /* modelBuilder.Entity<Parent>()
            .HasMany(Parent => Parent.Students)
            .WithOne(student => student.Parent)
-           .HasForeignKey(student => student.ParentId);
+           .HasForeignKey(student => student.ParentId);*/
 
             modelBuilder.Entity<Subjects>()
             .HasMany(Subjects => Subjects.Students)
@@ -174,6 +174,18 @@ namespace SmartAcademyBackend.Data
              new TimeSlots { TimeSlotId = 19, DayOfWeek = DaysOfTheWeek.Saturday, StartTime = new TimeOnly(12, 0), EndTime = new TimeOnly(13, 0) },
              new TimeSlots { TimeSlotId = 20, DayOfWeek = DaysOfTheWeek.Saturday, StartTime = new TimeOnly(13, 0), EndTime = new TimeOnly(14, 0) }
          );
+
+            modelBuilder.Entity<Tutor>()
+           .HasOne(u => u.User)
+           .WithOne(t => t.Tutor)
+           .HasForeignKey<Tutor>(t => t.UserId)
+           .OnDelete(DeleteBehavior.NoAction); ;
+
+            modelBuilder.Entity<Student>()
+            .HasOne(u => u.User)
+            .WithOne(t => t.Student)
+            .HasForeignKey<Student>(t => t.UserId)
+            .OnDelete(DeleteBehavior.NoAction); ;
 
 
 

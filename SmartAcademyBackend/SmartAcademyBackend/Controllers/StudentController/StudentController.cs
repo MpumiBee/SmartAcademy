@@ -1,21 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartAcademyBackend.DTOs.StudentDTOs;
+using SmartAcademyBackend.Enums;
 using SmartAcademyBackend.Service.StudentService;
+using System.Security.Claims;
 
 namespace SmartAcademyBackend.Controllers.StudentController
 {
     [Route("api/[controller]")]
     [ApiController]
     public class StudentController(IStudentService studentService) : ControllerBase
+
     {
+        [Authorize(Roles =RoleNames.Student)]
         [HttpPost]
         public async Task<IActionResult> addNewStudent(AddStudentDTO addStudent)
         {
-            var student = await studentService.addNewStudent(addStudent);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            Console.WriteLine(userId);
+            var student = await studentService.addNewStudent(addStudent, userId);
             if (student is null)
                 return BadRequest();
             return Created();
         }
+        [Authorize]
 
         [HttpGet]
         public async Task<ActionResult<List<GetStudentInfoDTO>>> getAllStudentsInformation()
@@ -58,5 +66,13 @@ namespace SmartAcademyBackend.Controllers.StudentController
             return NoContent();
         }
     }
+    public static class RoleNames
+    {
+        public const string Admin = nameof(UserRole.Admin);
+        public const string Parent = nameof(UserRole.Parent);
+        public const string Student = nameof(UserRole.Student);
+        public const string Tutor = nameof(UserRole.Tutor);
+    }
+
 
 }

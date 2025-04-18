@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAcademyBackend.Data;
 
@@ -11,9 +12,11 @@ using SmartAcademyBackend.Data;
 namespace SmartAcademyBackend.Migrations
 {
     [DbContext(typeof(SmartAcademyDbContext))]
-    partial class SmartAcademyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418142629_userEntityAdded")]
+    partial class userEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -595,6 +598,9 @@ namespace SmartAcademyBackend.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -603,6 +609,8 @@ namespace SmartAcademyBackend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Users");
                 });
@@ -752,6 +760,15 @@ namespace SmartAcademyBackend.Migrations
                     b.Navigation("TimeSlots");
 
                     b.Navigation("Tutor");
+                });
+
+            modelBuilder.Entity("SmartAcademyBackend.Entities.User", b =>
+                {
+                    b.HasOne("SmartAcademyBackend.Entities.Parent", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("SubjectsStudents", b =>
